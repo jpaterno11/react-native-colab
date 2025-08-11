@@ -1,18 +1,18 @@
 import React from 'react';
 import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
   Alert,
   KeyboardAvoidingView,
   Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { Input, Button, Card } from '../../components';
+import { Button, Card, Input } from '../../components';
 import useForm from '../../hooks/useForm';
-import { colors, layout, shadows, spacing, typography } from '../styles';
+import { colors, layout, spacing, typography } from '../styles';
 
 interface ContactForm {
   name: string;

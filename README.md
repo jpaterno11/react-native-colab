@@ -237,23 +237,23 @@ Don't forget to give the project a star! Thanks again!
 
 ## Aportes de cada integrante
 
-- **A**: Navegación y pantalla de inicio
-- **B**: Pantalla de perfil y componentes  
-- **C**: Formulario de contacto y estilos globales
+- **A (jpaterno11)**: Navegación y pantalla de inicio
+- **B (varcharJoaquin)**: Pantalla de perfil y componentes  
+- **C (varcharTomas)**: Formulario de contacto y estilos globales
 
 
 
 ## Code Reviews realizados
 
-- A revisó el PR de B en la rama `feature/perfil`
-- B revisó el PR de C en la rama `feature/formulario`  
-- C revisó el PR de A en la rama `feature/home`
+- Joaquin Paterno revisó el PR de Joaquin Frankenthal en la rama `feature/perfil`
+- Joaquin Frankenthal revisó el PR de Tomas Torchinsky en la rama `feature/formulario`  
+- Tomas Torchinsky revisó el PR de Joaquin Paterno en la rama `feature/home`
 
 ## Reflexiones
 
-- **A**: Me gustó trabajar con navegación. Me costó entender los conflictos de merge.
-- **B**: Aprendí a crear componentes reutilizables. Me resultó útil el trabajo en equipo.
-- **C**: Desarrollé habilidades en formularios y estilos. La colaboración fue muy enriquecedora.
+- **Joaquin Paterno**: Me gustó trabajar con navegación. Me costó entender los conflictos de merge.
+- **Joaquin Frankenthal**: Aprendí a crear componentes reutilizables. Me resultó útil el trabajo en equipo.
+- **Tomas Torchinsky**: Desarrollé habilidades en formularios y estilos. La colaboración fue muy enriquecedora.
 
 <!-- LICENSE -->
 ## License

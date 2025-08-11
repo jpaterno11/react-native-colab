@@ -1,16 +1,18 @@
-import React, { useState } from 'react';
-import { 
-  View, 
-  Text, 
-  StyleSheet, 
-  TouchableOpacity, 
-  TextInput, 
-  ScrollView, 
+import React from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
   Alert,
   KeyboardAvoidingView,
-  Platform 
+  Platform,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+
+import { Input, Button, Card } from '../../components';
+import useForm from '../../hooks/useForm';
+import { colors, layout, shadows, spacing, typography } from '../styles';
 
 interface ContactForm {
   name: string;
@@ -19,86 +21,33 @@ interface ContactForm {
   message: string;
 }
 
-export default function ContactScreen() {
-  const [formData, setFormData] = useState<ContactForm>({
-    name: '',
-    email: '',
-    subject: '',
-    message: '',
+const ContactScreen: React.FC = () => {
+  const { values, errors, handleChange, handleBlur, handleSubmit, isSubmitting, resetForm } = useForm<ContactForm>({
+    initialValues: { name: '', email: '', subject: '', message: '' },
+    validationRules: {
+      name: { required: true, minLength: 3 },
+      email: { required: true, pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/ },
+      subject: { required: true, minLength: 3 },
+      message: { required: true, minLength: 10, maxLength: 1000 },
+    },
+    onSubmit: async () => {
+      await new Promise((res) => setTimeout(res, 800));
+      Alert.alert('Mensaje Enviado', 'Gracias por contactarnos. Te responderemos pronto.', [
+        { text: 'OK', onPress: () => resetForm() },
+      ]);
+    },
   });
-  const [errors, setErrors] = useState<Partial<ContactForm>>({});
-
-  const validateForm = (): boolean => {
-    const newErrors: Partial<ContactForm> = {};
-
-    if (!formData.name.trim()) {
-      newErrors.name = 'El nombre es requerido';
-    }
-
-    if (!formData.email.trim()) {
-      newErrors.email = 'El email es requerido';
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'El email no es válido';
-    }
-
-    if (!formData.subject.trim()) {
-      newErrors.subject = 'El asunto es requerido';
-    }
-
-    if (!formData.message.trim()) {
-      newErrors.message = 'El mensaje es requerido';
-    } else if (formData.message.length < 10) {
-      newErrors.message = 'El mensaje debe tener al menos 10 caracteres';
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmit = () => {
-    if (validateForm()) {
-      // Aquí se enviaría el formulario a un servidor
-      Alert.alert(
-        'Mensaje Enviado',
-        'Gracias por contactarnos. Te responderemos pronto.',
-        [
-          {
-            text: 'OK',
-            onPress: () => {
-              setFormData({ name: '', email: '', subject: '', message: '' });
-              setErrors({});
-            },
-          },
-        ]
-      );
-    }
-  };
-
-  const updateFormData = (field: keyof ContactForm, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
-    // Limpiar error cuando el usuario empiece a escribir
-    if (errors[field]) {
-      setErrors(prev => ({ ...prev, [field]: undefined }));
-    }
-  };
 
   return (
     <SafeAreaView style={styles.container}>
-      <KeyboardAvoidingView 
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={styles.keyboardView}
-      >
-        <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
-          {/* Header */}
+      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.keyboardView}>
+        <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.header}>
             <Text style={styles.title}>Contacto</Text>
-            <Text style={styles.subtitle}>
-              ¿Tienes alguna pregunta o sugerencia? ¡Nos encantaría escucharte!
-            </Text>
+            <Text style={styles.subtitle}>¿Tienes alguna pregunta o sugerencia? ¡Nos encantaría escucharte!</Text>
           </View>
 
-          {/* Información de contacto */}
-          <View style={styles.contactInfo}>
+          <Card variant="default" padding="large" style={styles.infoCard}>
             <View style={styles.contactItem}>
               <Text style={styles.contactIcon}>📧</Text>
               <View style={styles.contactText}>
@@ -120,241 +69,153 @@ export default function ContactScreen() {
                 <Text style={styles.contactValue}>Buenos Aires, Argentina</Text>
               </View>
             </View>
-          </View>
+          </Card>
 
-          {/* Formulario */}
-          <View style={styles.formContainer}>
+          <Card variant="elevated" padding="large" style={styles.formCard}>
             <Text style={styles.formTitle}>Envíanos un mensaje</Text>
-            
-            <View style={styles.inputContainer}>
-              <Text style={styles.inputLabel}>Nombre *</Text>
-              <TextInput
-                style={[styles.input, errors.name && styles.inputError]}
-                placeholder="Tu nombre completo"
-                value={formData.name}
-                onChangeText={(value) => updateFormData('name', value)}
-                autoCapitalize="words"
-              />
-              {errors.name && <Text style={styles.errorText}>{errors.name}</Text>}
-            </View>
 
-            <View style={styles.inputContainer}>
-              <Text style={styles.inputLabel}>Email *</Text>
-              <TextInput
-                style={[styles.input, errors.email && styles.inputError]}
-                placeholder="tu@email.com"
-                value={formData.email}
-                onChangeText={(value) => updateFormData('email', value)}
-                keyboardType="email-address"
-                autoCapitalize="none"
-              />
-              {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
-            </View>
+            <Input
+              label="Nombre"
+              placeholder="Tu nombre completo"
+              value={values.name}
+              onChangeText={(val) => handleChange('name', val)}
+              onBlur={() => handleBlur('name')}
+              error={errors.name}
+              containerStyle={styles.inputContainer}
+            />
 
-            <View style={styles.inputContainer}>
-              <Text style={styles.inputLabel}>Asunto *</Text>
-              <TextInput
-                style={[styles.input, errors.subject && styles.inputError]}
-                placeholder="¿En qué podemos ayudarte?"
-                value={formData.subject}
-                onChangeText={(value) => updateFormData('subject', value)}
-                autoCapitalize="sentences"
-              />
-              {errors.subject && <Text style={styles.errorText}>{errors.subject}</Text>}
-            </View>
+            <Input
+              label="Email"
+              placeholder="tu@email.com"
+              value={values.email}
+              onChangeText={(val) => handleChange('email', val)}
+              onBlur={() => handleBlur('email')}
+              keyboardType="email-address"
+              autoCapitalize="none"
+              error={errors.email}
+              containerStyle={styles.inputContainer}
+            />
 
-            <View style={styles.inputContainer}>
-              <Text style={styles.inputLabel}>Mensaje *</Text>
-              <TextInput
-                style={[styles.textArea, errors.message && styles.inputError]}
-                placeholder="Describe tu consulta o sugerencia..."
-                value={formData.message}
-                onChangeText={(value) => updateFormData('message', value)}
-                multiline
-                numberOfLines={4}
-                textAlignVertical="top"
-                autoCapitalize="sentences"
-              />
-              {errors.message && <Text style={styles.errorText}>{errors.message}</Text>}
-            </View>
+            <Input
+              label="Asunto"
+              placeholder="¿En qué podemos ayudarte?"
+              value={values.subject}
+              onChangeText={(val) => handleChange('subject', val)}
+              onBlur={() => handleBlur('subject')}
+              error={errors.subject}
+              containerStyle={styles.inputContainer}
+            />
 
-            <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
-              <Text style={styles.submitButtonText}>Enviar Mensaje</Text>
-            </TouchableOpacity>
-          </View>
+            <Input
+              label="Mensaje"
+              placeholder="Describe tu consulta o sugerencia..."
+              value={values.message}
+              onChangeText={(val) => handleChange('message', val)}
+              onBlur={() => handleBlur('message')}
+              multiline
+              numberOfLines={4}
+              error={errors.message}
+              containerStyle={styles.inputContainer}
+            />
 
-          {/* Horarios de atención */}
-          <View style={styles.hoursContainer}>
+            <Button
+              title={isSubmitting ? 'Enviando...' : 'Enviar Mensaje'}
+              onPress={handleSubmit}
+              loading={isSubmitting}
+              variant="primary"
+              size="medium"
+              style={styles.submitButton}
+            />
+          </Card>
+
+          <Card variant="default" padding="large" style={styles.hoursCard}>
             <Text style={styles.hoursTitle}>Horarios de Atención</Text>
             <Text style={styles.hoursText}>Lunes a Viernes: 9:00 AM - 6:00 PM</Text>
             <Text style={styles.hoursText}>Sábados: 9:00 AM - 1:00 PM</Text>
             <Text style={styles.hoursText}>Domingos: Cerrado</Text>
-          </View>
+          </Card>
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: colors.background,
   },
   keyboardView: {
     flex: 1,
   },
-  scrollView: {
-    flex: 1,
-  },
   header: {
-    padding: 20,
-    backgroundColor: '#fff',
+    padding: layout.screenPadding,
+    backgroundColor: colors.surface,
     alignItems: 'center',
     borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
+    borderBottomColor: colors.border,
   },
   title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 10,
+    ...typography.title,
+    marginBottom: spacing.sm,
   },
   subtitle: {
-    fontSize: 16,
-    color: '#666',
+    ...typography.subtitle,
     textAlign: 'center',
     lineHeight: 22,
   },
-  contactInfo: {
-    backgroundColor: '#fff',
-    margin: 20,
-    padding: 20,
-    borderRadius: 12,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 3.84,
-    elevation: 5,
+  infoCard: {
+    marginTop: spacing.lg,
   },
   contactItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: spacing.lg,
   },
   contactIcon: {
     fontSize: 24,
-    marginRight: 15,
+    marginRight: spacing.md,
   },
   contactText: {
     flex: 1,
   },
   contactLabel: {
-    fontSize: 14,
-    color: '#666',
+    ...typography.caption,
     marginBottom: 2,
   },
   contactValue: {
-    fontSize: 16,
-    color: '#333',
+    ...typography.body,
     fontWeight: '500',
   },
-  formContainer: {
-    backgroundColor: '#fff',
-    margin: 20,
-    padding: 20,
-    borderRadius: 12,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 3.84,
-    elevation: 5,
+  formCard: {
+    marginTop: spacing.lg,
   },
   formTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 20,
+    ...typography.sectionTitle,
     textAlign: 'center',
+    marginBottom: spacing.lg,
   },
   inputContainer: {
-    marginBottom: 20,
-  },
-  inputLabel: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#333',
-    marginBottom: 8,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 8,
-    padding: 15,
-    fontSize: 16,
-    backgroundColor: '#fff',
-  },
-  textArea: {
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 8,
-    padding: 15,
-    fontSize: 16,
-    backgroundColor: '#fff',
-    height: 100,
-  },
-  inputError: {
-    borderColor: '#dc3545',
-  },
-  errorText: {
-    color: '#dc3545',
-    fontSize: 14,
-    marginTop: 5,
+    marginBottom: spacing.lg,
   },
   submitButton: {
-    backgroundColor: '#007AFF',
-    padding: 15,
-    borderRadius: 8,
-    alignItems: 'center',
-    marginTop: 10,
+    marginTop: spacing.md,
   },
-  submitButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  hoursContainer: {
-    backgroundColor: '#fff',
-    margin: 20,
-    padding: 20,
-    borderRadius: 12,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 3.84,
-    elevation: 5,
-    marginBottom: 40,
+  hoursCard: {
+    marginTop: spacing.lg,
+    marginBottom: spacing.xxl,
   },
   hoursTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 15,
+    ...typography.sectionTitle,
     textAlign: 'center',
+    marginBottom: spacing.md,
   },
   hoursText: {
-    fontSize: 16,
-    color: '#666',
+    ...typography.body,
+    color: colors.textMuted,
     textAlign: 'center',
-    marginBottom: 8,
+    marginBottom: spacing.sm,
   },
 });
+
+export default ContactScreen;

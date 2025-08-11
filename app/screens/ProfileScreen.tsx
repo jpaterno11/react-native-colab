@@ -1,23 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  Switch,
-  Alert,
-  Dimensions,
+    Alert,
+    Dimensions,
+    ScrollView,
+    StyleSheet,
+    Switch,
+    Text,
+    View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 // Componentes reutilizables del Usuario B
 import Avatar from '../../components/Avatar';
-import Card from '../../components/Card';
-import Button from '../../components/Button';
 import Badge from '../../components/Badge';
-import ListItem from '../../components/ListItem';
+import Button from '../../components/Button';
+import Card from '../../components/Card';
 import Input from '../../components/Input';
-import ProfileCard from '../../components/ProfileCard';
+import ListItem from '../../components/ListItem';
 
 // Hooks personalizados del Usuario B
 import useLocalStorage from '../../hooks/useLocalStorage';

@@ -17,6 +17,8 @@ interface ButtonProps {
   loading?: boolean;
   style?: ViewStyle;
   textStyle?: TextStyle;
+  left?: React.ReactNode;
+  right?: React.ReactNode;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -28,6 +30,8 @@ const Button: React.FC<ButtonProps> = ({
   loading = false,
   style,
   textStyle,
+  left,
+  right,
 }) => {
   const buttonStyle = [
     styles.button,
@@ -52,6 +56,7 @@ const Button: React.FC<ButtonProps> = ({
       disabled={disabled || loading}
       activeOpacity={0.8}
     >
+      {left}
       {loading ? (
         <ActivityIndicator
           color={variant === 'outline' ? '#007AFF' : '#FFFFFF'}
@@ -60,6 +65,7 @@ const Button: React.FC<ButtonProps> = ({
       ) : (
         <Text style={textStyles}>{title}</Text>
       )}
+      {right}
     </TouchableOpacity>
   );
 };

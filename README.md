@@ -120,9 +120,9 @@ Aplicación de **Gestión de Tareas** con navegación entre pantallas y componen
 - **Contacto**: Formulario de contacto y soporte
 
 ### División de Responsabilidades
-- **Participante A**: Navegación general (`react-navigation`) y pantalla Home
-- **Participante B**: Componentes reutilizables y pantalla Perfil  
-- **Participante C**: Lógica del formulario y estilos generales
+- **Joaquin Paterno**: Navegación general (`react-navigation`) y pantalla Home
+- **Joaquin Frankenthal**: Componentes reutilizables y pantalla Perfil  
+- **Tomas Torchinsky**: Lógica del formulario y estilos generales
 
 <!-- GETTING STARTED -->
 ## Getting Started
@@ -198,14 +198,14 @@ _For more examples, please refer to the [React Native Documentation](https://rea
 
 - [x] Configuración inicial del proyecto
 - [x] Estructura de navegación básica
-- [ ] Implementación de pantalla Home
-- [ ] Implementación de pantalla Perfil
-- [ ] Implementación de pantalla Contacto
-- [ ] Componentes reutilizables (Greeting, Counter, ProfileCard)
-- [ ] Sistema de gestión de tareas
-- [ ] Persistencia de datos local
-- [ ] Temas y estilos personalizables
-- [ ] Testing de componentes
+- [x] Implementación de pantalla Home
+- [x] Implementación de pantalla Perfil
+- [x] Implementación de pantalla Contacto
+- [x] Componentes reutilizables (Greeting, Counter, ProfileCard)
+- [x] Sistema de gestión de tareas
+- [x] Persistencia de datos local
+- [x] Temas y estilos personalizables
+- [x] Testing de componentes
 
 See the [open issues](https://github.com/jpaterno11/react-native-colab/issues) for a full list of proposed features (and known issues).
 
@@ -237,9 +237,9 @@ Don't forget to give the project a star! Thanks again!
 
 ## Aportes de cada integrante
 
-- **A (jpaterno11)**: Navegación y pantalla de inicio
-- **B (varcharJoaquin)**: Pantalla de perfil y componentes  
-- **C (varcharTomas)**: Formulario de contacto y estilos globales
+- **jpaterno11**: Navegación y pantalla de inicio
+- **varcharJoaquin**: Pantalla de perfil y componentes  
+- **varcharTomas**: Formulario de contacto y estilos globales
 
 
 
